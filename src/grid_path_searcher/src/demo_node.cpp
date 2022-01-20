@@ -136,6 +136,9 @@ public:
         *
         */
 
+        auto x = state3D->values[0];
+        auto y = state3D->values[1];
+        auto z = state3D->values[2];
         return _RRTstar_preparatory->isObsFree(x, y, z);
     }
 };
@@ -188,6 +191,10 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
     *
     */
 
+   start[0] = start_pt[0];
+   start[1] = start_pt[1];
+   start[2] = start_pt[2];
+
     // Set our robot's goal state
     ob::ScopedState<> goal(space);
     /**
@@ -197,6 +204,10 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
     *
     *
     */
+
+   goal[0] = target_pt[0];
+   goal[1] = target_pt[1];
+   goal[2] = target_pt[2];
 
     // Create a problem instance
 
@@ -208,6 +219,9 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
     *
     *
     */
+
+   // shared ptr pdef
+    ob::ProblemDefinitionPtr pdef (std::make_shared<ob::ProblemDefinition>(si)); 
 
     // Set the start and goal states
     pdef->setStartAndGoalStates(start, goal);
@@ -222,6 +236,8 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
     *
     */  
 
+    ompl::base::OptimizationObjectivePtr optimization = getPathLengthObjective(si);
+
     // Construct our optimizing planner using the RRTstar algorithm.
     /**
     *
@@ -231,6 +247,8 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
     *
     *
     */ 
+
+    ob::PlannerPtr optimizingPlanner(std::make_shared<og::RRTstar>(si));
 
     // Set the problem instance for our planner to solve
     optimizingPlanner->setProblemDefinition(pdef);
@@ -258,6 +276,11 @@ void pathFinding(const Vector3d start_pt, const Vector3d target_pt)
             *
             *
             */ 
+            Eigen::Vector3d marker;
+            marker  <<  state->values[0],
+                        state->values[1],
+                        state->values[2];
+            path_points.push_back(marker);
         }
         visRRTstarPath(path_points);       
     }

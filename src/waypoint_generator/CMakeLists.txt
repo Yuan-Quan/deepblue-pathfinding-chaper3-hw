@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(waypoint_generator)
 
+ADD_COMPILE_OPTIONS(-std=c++11 )
+ADD_COMPILE_OPTIONS(-std=c++14 )
+set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+
 set(CMAKE_VERBOSE_MAKEFILE "true")
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
